@@ -3,72 +3,170 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Authentication</title>
+    <title>Login</title>
     <style>
-        *{
+        :root {
+            --bg-start: #ffd7e9;
+            --bg-end: #c5e4ff;
+            --card: rgba(255, 255, 255, 0.96);
+            --shadow: 0 20px 50px rgba(0, 0, 0, 0.12);
+            --text: #2a3340;
+            --accent: #5b6bf3;
+            --border: #d8dee8;
+        }
+
+        * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-        .parent{
-            width: 100%;
-            height: 100vh;
-           background: #EEAECA;
-background: radial-gradient(circle, rgba(238, 174, 202, 1) 0%, rgba(148, 187, 233, 1) 100%);
+
+        body {
+            min-height: 100vh;
+            background: radial-gradient(circle at top left, rgba(255, 255, 255, 0.95), transparent 35%),
+                        radial-gradient(circle at bottom right, rgba(127, 191, 255, 0.35), transparent 25%),
+                        linear-gradient(135deg, var(--bg-start), var(--bg-end));
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+        }
+
+        .card {
+            width: min(100%, 420px);
+            background: var(--card);
+            border-radius: 28px;
+            box-shadow: var(--shadow);
+            border: 1px solid rgba(255, 255, 255, 0.7);
+            overflow: hidden;
+        }
+
+        .card__hero {
+            padding: 36px 28px 24px;
+            background: linear-gradient(180deg, rgba(91, 107, 243, 0.16), transparent 100%);
+            text-align: center;
+        }
+
+        .card__hero h1 {
+            font-size: 2rem;
+            letter-spacing: 0.04em;
+            margin-bottom: 12px;
+        }
+
+        .card__hero p {
+            color: #5f6d86;
+            line-height: 1.6;
+            font-size: 0.96rem;
+        }
+
+        .card__body {
+            padding: 30px 28px 32px;
+        }
+
+        .field {
             display: flex;
             flex-direction: column;
-            justify-content: center;
-            align-items: center;
-           
+            gap: 8px;
+            margin-bottom: 18px;
         }
-        input{
-            display: block;
-            margin: 20px;
-            padding: 10px;
-            border: none;
-            border-radius: 5px;
-            box-shadow: 2px 2px 2px rgb(0, 0, 0);
-            background-color: pink;
-            counter-increment: none;
 
+        .field label {
+            font-size: 0.95rem;
+            color: #556177;
         }
-        .child{
-            background-color: rgb(255, 255, 255);
-            border-radius: 10px;
+
+        .field input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            background: #fbfbff;
+            color: var(--text);
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+            font-size: 1rem;
         }
-        button{
-            margin: 20px;
-            padding: 8px;
+
+        .field input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 4px rgba(91, 107, 243, 0.12);
+        }
+
+        .actions {
+            display: flex;
+            justify-content: center;
+            margin-top: 8px;
+        }
+
+        .actions button {
+            width: 100%;
+            padding: 14px 18px;
             border: none;
-            border-radius: 5px;
-            width: 200px;
-            background-color: rgb(0, 0, 255);
+            border-radius: 999px;
+            background: linear-gradient(135deg, #5568ff, #7b5bff);
             color: white;
-            border-radius: 20px;
-        
-            
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
-        h1{
+
+        .actions button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 15px 25px rgba(85, 104, 255, 0.24);
+        }
+
+        .note {
+            margin-top: 18px;
             text-align: center;
-            margin-top: 5px;
-            color: rgb(247, 112, 135);
+            color: #64718d;
+            font-size: 0.92rem;
+            line-height: 1.5;
+        }
+
+        @media (max-width: 480px) {
+            .card {
+                border-radius: 24px;
+            }
+
+            .card__hero {
+                padding: 28px 20px 20px;
+            }
+
+            .card__body {
+                padding: 24px 20px 28px;
+            }
         }
     </style>
 </head>
 <body>
-   <div class="parent">
-    <div class="child">
-        <h1>Login</1>
-    <form method="post" action="/login">
-        
-         <input type="email" placeholder="email" name="email">
-        <input type="password" placeholder="password" name="password">
-        
-        <div>
-        <button type="submit">Login</button>
-        </div>
-    </form>
-    </div>
-   </div>
+    <main class="card">
+        <section class="card__hero">
+            <h1>Welcome back</h1>
+            <p>Sign in to your account and continue with your secure dashboard.</p>
+        </section>
+
+        <section class="card__body">
+            <form method="post" action="/login">
+                <div class="field">
+                    <label for="email">Email</label>
+                    <input id="email" type="email" name="email" placeholder="you@example.com" required>
+                </div>
+
+                <div class="field">
+                    <label for="password">Password</label>
+                    <input id="password" type="password" name="password" placeholder="Enter your password" required>
+                </div>
+
+                <div class="actions">
+                    <button type="submit">Login</button>
+                </div>
+            </form>
+
+            <p class="note">Need an account? Go to signup.</p>
+        </section>
+    </main>
 </body>
 </html>

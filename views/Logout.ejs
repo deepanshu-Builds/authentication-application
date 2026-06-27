@@ -1,109 +1,220 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Logout</title>
-    <style>
-        *{
-            padding: 0;
-            margin: 0;
-            box-sizing: border-box;
-        }
-        
-        .parent{
-            height: 100vh;
-            width: 100%;
-            background-color: rgb(20, 20, 20);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-      
-        .child{
-            background-color:rgb(189, 189, 189) ;
-            height: 400px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-evenly;
-            align-items: center;
-            border-radius: 20px;
-            
-          
-        }
-        .image{
-            display: flex;
-            justify-content: center;
-            height: 50px;
-            border-radius: 50%;
-            
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Logged Out</title>
 
-        }
-        img{
-            border-radius: 50%;
-        }
-        h2{
-            margin: 10px;
-            margin-top: 20px;
-            margin-bottom: 20px;
-           font-family: cursive;
-           font-weight: bold;
-          
-           
-           
-        }
-        .your{
-           margin-top: -1px;
-            text-align: center;
-            color: rgb(66, 64, 64);
-            font-weight: bold;
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-            margin-bottom: 10px;
-        }
-        
-        button{
-            width: 300px;
-            padding: 5px;
-            margin: 10px;
-            color: rgb(59, 58, 57);
-            font-family: cursive;
-            font-weight: bold;
-           
-            color: #dbeafe; /* light blue */
-   
-     background-color: #0433b3;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
+<style>
 
-        }
-        button:hover{
-            
-             background-color: #1d4ed8;
-             border: 1px solid black;
-             box-shadow: 2px 2px 2px black;
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
+}
 
-        }
-        .data:hover{
-            cursor: pointer;
-            text-decoration: underline;
-        }
-    </style>
+body{
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:linear-gradient(135deg,#0f172a,#111827,#020617);
+    overflow:hidden;
+}
+
+/* Background Blur */
+
+body::before{
+    content:'';
+    position:absolute;
+    width:350px;
+    height:350px;
+    background:#2563eb;
+    border-radius:50%;
+    filter:blur(150px);
+    left:-120px;
+    top:-120px;
+}
+
+body::after{
+    content:'';
+    position:absolute;
+    width:350px;
+    height:350px;
+    background:#16a34a;
+    border-radius:50%;
+    filter:blur(150px);
+    right:-120px;
+    bottom:-120px;
+}
+
+.card{
+
+    position:relative;
+    width:430px;
+    padding:45px 35px;
+    border-radius:25px;
+
+    background:rgba(255,255,255,.08);
+    backdrop-filter:blur(20px);
+
+    border:1px solid rgba(255,255,255,.15);
+
+    text-align:center;
+
+    box-shadow:
+    0 20px 50px rgba(0,0,0,.45);
+
+}
+
+.image{
+
+    width:95px;
+    height:95px;
+    margin:auto;
+    border-radius:50%;
+    overflow:hidden;
+
+    border:4px solid #22c55e;
+    box-shadow:0 0 30px rgba(34,197,94,.5);
+
+}
+
+.image img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}
+
+h1{
+
+    margin-top:25px;
+    color:white;
+    font-size:28px;
+
+}
+
+p{
+
+    color:#cbd5e1;
+    margin-top:15px;
+    line-height:1.7;
+    font-size:15px;
+
+}
+
+.buttons{
+
+    margin-top:35px;
+    display:flex;
+    flex-direction:column;
+    gap:15px;
+
+}
+
+button{
+
+    padding:14px;
+    border:none;
+    border-radius:10px;
+
+    font-size:15px;
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:.3s;
+
+}
+
+.login{
+
+    background:#2563eb;
+    color:white;
+
+}
+
+.login:hover{
+
+    background:#1d4ed8;
+    transform:translateY(-3px);
+
+}
+
+.home{
+
+    background:transparent;
+    color:white;
+    border:2px solid rgba(255,255,255,.2);
+
+}
+
+.home:hover{
+
+    background:rgba(255,255,255,.08);
+    transform:translateY(-3px);
+
+}
+
+.footer{
+
+    margin-top:30px;
+    color:#94a3b8;
+    font-size:14px;
+
+}
+
+.footer:hover{
+
+    color:white;
+    cursor:pointer;
+
+}
+
+</style>
+
 </head>
+
 <body>
-    <div class="parent">
-        <div class="child">
-            <div class="image" >
-            <img src="https://img.magnific.com/premium-vector/green-checkmark-inside-orange-circle-affirmation-confirmation_1163725-4151.jpg?semt=ais_hybrid&w=740&q=80" alt=" Image not found">
-            </div>
-            <h2> YOU LOGGED OUT SUCCESSFULLY </h2>
-            <p class="your">Your session has been ended safely.See you next time!</p>
-            <button onclick="window.location.href='/' ">Log back in</button>
-            <button onclick="window.location.href='/' ">Go to home</button>
-               
-            <p class="data" >Your data is safe and secure.</p>
-        </div>
-    </div>
-   
+
+<div class="card">
+
+<div class="image">
+
+<img src="https://img.magnific.com/premium-vector/green-checkmark-inside-orange-circle-affirmation-confirmation_1163725-4151.jpg?semt=ais_hybrid&w=740&q=80">
+
+</div>
+
+<h1>Logged Out Successfully</h1>
+
+<p>
+Your session has ended securely.
+Thank you for visiting. We hope to see you again soon.
+</p>
+
+<div class="buttons">
+
+<button class="login"
+onclick="location.href='/'">
+Log Back In
+</button>
+
+<button class="home"
+onclick="location.href='/'">
+Go to Home
+</button>
+
+</div>
+
+<div class="footer">
+🔒 Your account and data remain safe & secure.
+</div>
+
+</div>
+
 </body>
 </html>
