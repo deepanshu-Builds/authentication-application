@@ -6,7 +6,8 @@ const UserModel = require("./model/user")
 const bcrypt = require("bcrypt");
 const path = require("path");
 const mongoose = require("mongoose");
-const jwt = require("jsonwebtoken")
+const jwt = require("jsonwebtoken");
+const rateLimit = require("express-rate-limit");
 app.set("view engine", "ejs");
 
 const cookieParser = require("cookie-parser");
@@ -18,6 +19,42 @@ app.use(express.static(path.join(__dirname , "public")));
 app.get("/" , (req , res )=>{
     res.render("signup")
 })
+
+
+        // MIDDLEWARE FOR AUTHENTICATION
+        const authMiddleware = (req , res , next)=>{
+            const token = req.cookies.token;
+            
+            if(!token) return res.status(401).json({message : "Unauthorized"});
+            try{
+                const decoded = jwt.verify(token , process.env.JWT_SECRET);
+                req.user = decoded;
+                next();
+            }catch(err){
+                return res.status(401).json({message : "Unauthorized"});
+            }
+
+            
+        }
+             //   EXPRESS RATE LIMITER
+
+
+
+             const loginLimiter = rateLimit({
+                windowMs: 15*60*1000,
+                max: 5,
+                message : "To many login attempt from this IP , Please try again after 15 minutes",
+                skipSuccessfulRequests : true,
+               keyGenerator : (req)=>{
+                return req.body.email;
+               }}
+            )
+
+
+             
+
+
+
 app.post("/create" , [
 
     //USERNAME VALIDATION
@@ -93,6 +130,9 @@ bcrypt.compare(req.body.password , user.password , (err , result)=>{
     }
     else res.send("Something went wrong ! ");
 })
+})
+app.get("/profile" , authMiddleware , (req , res)=>{
+    res.render("profile");
 })
 app.get("/logout" , (req , res)=>{
     res.clearCookie("token");
