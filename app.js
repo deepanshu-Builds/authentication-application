@@ -6,8 +6,10 @@ const jwt = require("jsonwebtoken");
 const argon2 = require("argon2");
 const cookieparser = require("cookie-parser");
 const UserModel = require("./model/user");
-const refreshModel = require("./model/refresj.token")
-const rateLimit = require("express-rate-limit")
+const forgotModel = require("./model/forgotpassword");
+const refreshModel = require("./model/refresj.token");
+const rateLimit = require("express-rate-limit");
+const nodemailer = require("nodemailer");
 const {body , validationResult} = require("express-validator");
 app.use(cookieparser());
 app.set("view engine" , "ejs");
@@ -221,10 +223,101 @@ app.get("/logout" ,async (req , res)=>{
 })
 
 app.get("/logout-all" , authMiddleware , async (req , res)=>{
+    try{
     await refreshModel.deleteMany({user : req.user._id});
     res.clearCookie("accessToken");
     res.clearCookie("refreshToken");
+      return res.status(200).json({message: "Logged out from all devices!"});
+    }catch(error){
+        console.log(error);
+    }
+});
+
+const generateOTP = () => {
+   return  Math.floor(Math.random()*900000)+100000;
+}
+
+
+app.post("/forgot" , async (req , res)=>{
+let {email} = req.body;
+try{
+    const user = await UserModel.findOne({email});
+    if(!user){
+        return res.status(401).json({
+            message : "Invalid Email or wrong Password"
+        });
+    }
+const otp = generateOTP();
+await forgotModel.create({
+    otp,
+    user : user._id,
+    expiresAt : new Date(Date.now()+5*60*1000)
+});
+let transpoter = nodemailer.createTransport({
+    host : "smtp.ethereal.email",
+    port : 587,
+    auth : {
+        user : "coby.hilll@ethereal.email",
+        pass : "cKqWxpYjRhkB4S4KvS"
+    }
+});
+const mailOptions = {
+    from : "coby.hilll@ethereal.emai",
+    to : user.email,
+    subject : `Yout otp is ${otp}`,
+    text : "Please do not share this otp to anyone "
+}
+
+transpoter.sendMail(mailOptions , function (error , info){
+    if(error){
+        console.error("There is error and that is " , + error);
+        return res.status(400).json({message : "Something went wrong"});
+    }
+    else{
+        console.log(info.messageId);
+    }
+    return res.status(200).json({message : "OTP sent to  your eamil and it is valid for 5 minutes :"})
 })
+
+}catch(err)
+{
+    console.log(err);
+return res.status(401).json({message : "Something went wrong "})
+}
+});
+app.post("/verify-otp" ,async  (req , res)=>{
+let {otp , newPassword} = req.body;
+
+
+try {
+    const findOTP = await forgotModel.findOne({otp});
+if(!findOTP){
+    return res.status(400).json({message : "OTP is not valid" })
+    
+}
+    if (Date.now() > findOTP.expiresAt) {
+        await forgotModel.deleteOne({_id : findOTP._id});
+    return res.status(400).json({ message: "OTP has expired" });
+}  
+const hash =  await argon2.hash(newPassword);
+await UserModel.findByIdAndUpdate(findOTP.user , {
+    password : hash
+
+}) ;
+await forgotModel.findOneAndDelete({_id: findOTP._id});
+return res.status(200).json({message : "password updated successfully !"});
+}catch(error){
+    console.log(error);
+  res.status(401).json({message : "Something went wrong !"});
+      
+}
+
+
+});
+
+
+
+
 
 
 app.listen(3000 , ()=>{
